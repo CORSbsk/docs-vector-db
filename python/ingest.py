@@ -20,6 +20,7 @@ def file_hash(path):
 
 
 def ingest(path, chunk_size=500):
+    """Devuelve {"status": "ok" | "duplicate" | "empty", "filename": ..., "chunks": ...}"""
     filename = os.path.basename(path)
     ext = os.path.splitext(filename)[1].lower().lstrip(".")
     h = file_hash(path)
@@ -28,23 +29,17 @@ def ingest(path, chunk_size=500):
     register_vector(conn)
     cur = conn.cursor()
     try:
-        # 1. ¿Ya existe este archivo?
         cur.execute("SELECT id FROM documents WHERE file_hash = %s", (h,))
         if cur.fetchone():
-            print(f"[omitido] {filename} ya estaba en la base de datos")
-            return
+            return {"status": "duplicate", "filename": filename, "chunks": 0}
 
-        # 2. Extraer y dividir
         records = extract(path)
         if not records:
-            print(f"[omitido] {filename}: no se extrajo texto (PDF NO LEGIBLE)")
-            return
+            return {"status": "empty", "filename": filename, "chunks": 0}
         chunks = chunk_pages(records, size=chunk_size)
 
-        # 3. Embeddings de todos los chunks en lote
         embeddings = embed_texts([c["content"] for c in chunks])
 
-        # 4. Guardar documento y chunks en una sola transacción
         cur.execute(
             "INSERT INTO documents (filename, file_type, file_hash) "
             "VALUES (%s, %s, %s) RETURNING id",
@@ -63,12 +58,24 @@ def ingest(path, chunk_size=500):
             rows,
         )
         conn.commit()
-        print(f"[ok] {filename}: {len(chunks)} chunks guardados")
+        return {"status": "ok", "filename": filename, "chunks": len(chunks)}
     except Exception:
         conn.rollback()
         raise
     finally:
         conn.close()
+
+
+MESSAGES = {
+    "ok": "[ok] {filename}: {chunks} chunks guardados",
+    "duplicate": "[omitido] {filename} ya estaba en la base de datos",
+    "empty": "[omitido] {filename}: no se extrajo texto (¿PDF escaneado?)",
+}
+
+
+def ingest_and_print(path, size):
+    result = ingest(path, size)
+    print(MESSAGES[result["status"]].format(**result))
 
 
 if __name__ == "__main__":
@@ -82,6 +89,6 @@ if __name__ == "__main__":
     if os.path.isdir(target):
         for name in sorted(os.listdir(target)):
             if name.lower().endswith(".pdf"):
-                ingest(os.path.join(target, name), size)
+                ingest_and_print(os.path.join(target, name), size)
     else:
-        ingest(target, size)
+        ingest_and_print(target, size)
