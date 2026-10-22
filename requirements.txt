@@ -4,3 +4,7 @@ pgvector
 pymupdf
 python-docx
 pandas
+
+fastapi
+uvicorn[standard]
+python-multipart
