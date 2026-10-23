@@ -1,0 +1,15 @@
+/* ===== PERSONALIZACIÓN =====
+   Cambia estos valores y recarga la página (Ctrl+F5).
+   Los colores usan el formato oklch(luminosidad croma matiz):
+   para cambiar el color base, mueve solo el último número (0-360). */
+
+:root[data-theme] {
+  --color-primary: oklch(62% 0.2 275);          /* color principal: botones, burbuja del usuario */
+  --color-primary-content: oklch(98% 0 0);      /* texto sobre el color principal */
+  --radius-box: 1rem;                           /* redondeo de tarjetas */
+  --radius-field: 0.75rem;                      /* redondeo de botones e inputs */
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}

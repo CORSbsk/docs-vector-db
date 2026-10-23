@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Buscador de documentos</title>
+
+  <script>
+    try { document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark"; } catch (e) {}
+  </script>
+
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div class="drawer lg:drawer-open h-dvh">
+    <input id="sidebar-toggle" type="checkbox" class="drawer-toggle">
+
+    <!-- ========== Zona principal ========== -->
+    <div class="drawer-content flex flex-col h-dvh min-h-0">
+
+      <header class="navbar bg-base-200 border-b border-base-300">
+        <div class="flex-none lg:hidden">
+          <label for="sidebar-toggle" class="btn btn-square btn-ghost" aria-label="Abrir documentos">☰</label>
+        </div>
+        <div class="flex-1 px-2 text-lg font-semibold">Buscador de documentos</div>
+        <button id="theme-toggle" class="btn btn-ghost btn-sm" type="button">Tema</button>
+      </header>
+
+      <main id="chat" class="flex-1 min-h-0 overflow-y-auto p-4">
+        <div id="messages" class="max-w-3xl mx-auto space-y-4">
+          <div class="chat chat-start">
+            <div class="chat-bubble">
+              Hola. Sube tus PDFs en la barra lateral y pregúntame lo que quieras encontrar en ellos.
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <form id="chat-form" class="p-4 border-t border-base-300 bg-base-200">
+        <div class="max-w-3xl mx-auto flex gap-2">
+          <input id="query" type="text" maxlength="500" autocomplete="off"
+                 placeholder="Escribe tu pregunta..."
+                 class="input input-bordered flex-1">
+          <button id="send-btn" type="submit" class="btn btn-primary">Enviar</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ========== Barra lateral ========== -->
+    <div class="drawer-side z-20">
+      <label for="sidebar-toggle" class="drawer-overlay" aria-label="Cerrar documentos"></label>
+      <aside class="w-80 min-h-full bg-base-200 p-4 flex flex-col gap-4">
+        <div class="flex items-center justify-between">
+          <h2 class="font-semibold text-lg">Documentos</h2>
+          <span id="doc-count" class="badge badge-ghost">0</span>
+        </div>
+
+        <label id="upload-label" class="btn btn-primary w-full">
+          <span id="upload-text">Subir PDF</span>
+          <input id="file-input" type="file" accept=".pdf,application/pdf" multiple hidden>
+        </label>
+
+        <ul id="doc-list" class="flex flex-col gap-2"></ul>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Avisos flotantes -->
+  <div id="toasts" class="toast toast-top toast-end z-50"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
