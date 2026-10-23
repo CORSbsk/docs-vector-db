@@ -26,7 +26,7 @@ Evolución de [dogs-vector-db](https://github.com/CORSbsk/dogs-vector-db): el mi
 11. [Limitaciones conocidas](#11-limitaciones-conocidas)
 12. [Estado y siguientes pasos](#12-estado-y-siguientes-pasos)
 13. [Solución de problemas](#13-solución-de-problemas)
-14. [Preguntas:](#14-preguntas:)
+14. [Preguntas](#14-preguntas)
 
 ---
 
@@ -258,7 +258,7 @@ El avance se lleva en el [tablero del proyecto](https://github.com/CORSbsk/docs-
 | La vista previa de un documento antiguo da error 404 | Se subió antes de guardar los originales. Elimínalo y vuelve a subirlo |
 | Los cambios en `static/` no se ven | Recarga con `Ctrl + F5` para saltarte la caché del navegador |
 
-## 14. Preguntas:
+## 14. Preguntas
 
 - *¿Por qué no usar ChatGPT directamente?* Aquí los documentos se quedan en tu equipo y las respuestas siempre apuntan a una fuente concreta.
 - *¿Funciona con documentos en inglés?* Sí, el modelo es multilingüe.
