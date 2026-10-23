@@ -9,6 +9,7 @@ from chunker import chunk_pages
 from db import get_connection
 from embeddings import embed_texts
 from extractors import extract
+from storage import save_pdf
 
 
 def file_hash(path):
@@ -37,6 +38,7 @@ def ingest(path, chunk_size=500):
         if not records:
             return {"status": "empty", "filename": filename, "chunks": 0}
         chunks = chunk_pages(records, size=chunk_size)
+        save_pdf(path, h)
 
         embeddings = embed_texts([c["content"] for c in chunks])
 
